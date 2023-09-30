@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Game</title>
+    <style>
+        canvas {
+            background-color: #000;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const roadImage = new Image();
+        roadImage.src = "road.png";
+
+        const carImage = new Image();
+        carImage.src = "Player1.png";
+
+        const car = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 100,
+            width: 50,
+            height: 100,
+            speed: 5
+        };
+
+        function draw() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the road
+            ctx.drawImage(roadImage, 0, 0, canvas.width, canvas.height);
+
+            // Draw the car
+            ctx.drawImage(carImage, car.x, car.y, car.width, car.height);
+        }
+
+        function update() {
+            // Handle user input
+            document.addEventListener("keydown", function (event) {
+                switch (event.key) {
+                    case "a":
+                        car.x -= car.speed;
+                        break;
+                    case "d":
+                        car.x += car.speed;
+                        break;
+                    case "w":
+                        car.y -= car.speed;
+                        break;
+                    case "s":
+                        car.y += car.speed;
+                        break;
+                }
+            });
+
+            // Ensure the car stays within the canvas boundaries
+            if (car.x < 0) {
+                car.x = 0;
+            }
+            if (car.x + car.width > canvas.width) {
+                car.x = canvas.width - car.width;
+            }
+            if (car.y < 0) {
+                car.y = 0;
+            }
+            if (car.y + car.height > canvas.height) {
+                car.y = canvas.height - car.height;
+            }
+        }
+
+        function gameLoop() {
+            draw();
+            update();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game loop
+        gameLoop();
+    </script>
+</body>
+</html>
